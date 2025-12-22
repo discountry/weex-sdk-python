@@ -149,3 +149,6 @@ Thumbs.db
 .pypirc
 *.bak
 *.tmp
+
+# Ruff
+.ruff_cache/
