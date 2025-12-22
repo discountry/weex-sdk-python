@@ -10,7 +10,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 
 setup(
     name="weex-sdk",
-    version="1.0.4",
+    version="1.0.5",
     author="Weex SDK Contributors",
     description="A comprehensive Python SDK for Weex exchange API (HTTP + WebSocket)",
     long_description=long_description,
@@ -20,7 +20,6 @@ setup(
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.8",
