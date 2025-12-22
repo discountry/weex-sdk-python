@@ -2,8 +2,8 @@
 
 from weex_sdk.api.account import AccountAPI, AsyncAccountAPI
 from weex_sdk.api.ai import AIAPI, AsyncAIAPI
-from weex_sdk.api.market import MarketAPI, AsyncMarketAPI
-from weex_sdk.api.trade import TradeAPI, AsyncTradeAPI
+from weex_sdk.api.market import AsyncMarketAPI, MarketAPI
+from weex_sdk.api.trade import AsyncTradeAPI, TradeAPI
 from weex_sdk.client import AsyncWeexClient, WeexClient
 from weex_sdk.exceptions import (
     WeexAPIError,

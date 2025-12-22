@@ -8,13 +8,13 @@ import requests
 
 from weex_sdk.api.account import AccountAPI, AsyncAccountAPI
 from weex_sdk.api.ai import AIAPI, AsyncAIAPI
-from weex_sdk.api.market import MarketAPI, AsyncMarketAPI
-from weex_sdk.api.trade import TradeAPI, AsyncTradeAPI
+from weex_sdk.api.market import AsyncMarketAPI, MarketAPI
+from weex_sdk.api.trade import AsyncTradeAPI, TradeAPI
 from weex_sdk.auth import RequestHeaders
 from weex_sdk.exceptions import (
+    raise_exception_from_response,
     WeexNetworkError,
     WeexRateLimitError,
-    raise_exception_from_response,
 )
 from weex_sdk.logger import get_logger
 from weex_sdk.utils.helpers import sanitize_log_data
