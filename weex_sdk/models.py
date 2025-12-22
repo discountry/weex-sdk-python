@@ -1,7 +1,8 @@
 """Data models and type definitions for Weex SDK."""
 
 from dataclasses import dataclass
-from typing import Optional, List, Dict, Any, Union, Callable
+from typing import Any, Callable, Dict, List, Optional, Union
+
 from typing_extensions import TypedDict
 
 

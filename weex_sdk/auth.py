@@ -1,10 +1,9 @@
 """Authentication and signature generation for Weex API."""
 
 import base64
-import hmac
 import hashlib
+import hmac
 import time
-from typing import Optional
 
 
 class SignatureGenerator:

@@ -1,8 +1,9 @@
 """Trade API module for Weex SDK."""
 
-from typing import Optional, Dict, Any, List
-from weex_sdk.client import WeexClient, AsyncWeexClient
-from weex_sdk.models import Order, OrderFill
+from typing import Any, Dict, List, Optional
+
+from weex_sdk.client import AsyncWeexClient, WeexClient
+from weex_sdk.models import Order
 
 
 class TradeAPI:
@@ -48,7 +49,7 @@ class TradeAPI:
             Order placement response with order_id
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         data: Dict[str, Any] = {
             "symbol": symbol,
@@ -86,7 +87,7 @@ class TradeAPI:
             Batch order placement response
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         data: Dict[str, Any] = {
             "symbol": symbol,
@@ -112,7 +113,7 @@ class TradeAPI:
             Cancellation response
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
             ValueError: If neither order_id nor client_oid provided
         """
         if not order_id and not client_oid:
@@ -141,7 +142,7 @@ class TradeAPI:
             Batch cancellation response
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
             ValueError: If neither ids nor cids provided
         """
         if not ids and not cids:
@@ -165,7 +166,7 @@ class TradeAPI:
             Order details
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         return self.client.get("/capi/v2/order/detail", params={"orderId": order_id})
 
@@ -186,7 +187,7 @@ class TradeAPI:
             List of historical orders
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         params: Dict[str, Any] = {}
         if symbol:
@@ -224,7 +225,7 @@ class TradeAPI:
             List of current orders
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         params: Dict[str, Any] = {}
         if symbol:
@@ -266,7 +267,7 @@ class TradeAPI:
             Order fill details with list and pagination info
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         params: Dict[str, Any] = {}
         if symbol:
@@ -309,7 +310,7 @@ class TradeAPI:
             Plan order placement response
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         data: Dict[str, Any] = {
             "symbol": symbol,
@@ -335,7 +336,7 @@ class TradeAPI:
             Cancellation response
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         return self.client.post("/capi/v2/order/cancel_plan", data={"orderId": str(order_id)})
 
@@ -362,7 +363,7 @@ class TradeAPI:
             List of current plan orders
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         params: Dict[str, Any] = {}
         if symbol:
@@ -404,7 +405,7 @@ class TradeAPI:
             History plan orders with pagination info
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         params: Dict[str, Any] = {"symbol": symbol}
         if start_time:
@@ -428,7 +429,7 @@ class TradeAPI:
             List of close position results
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         data: Dict[str, Any] = {}
         if symbol:
@@ -454,7 +455,7 @@ class TradeAPI:
             List of cancellation results
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         data: Dict[str, Any] = {"cancelOrderType": cancel_order_type}
         if symbol:
@@ -492,7 +493,7 @@ class TradeAPI:
             TP/SL order placement response
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         data: Dict[str, Any] = {
             "symbol": symbol,
@@ -533,7 +534,7 @@ class TradeAPI:
             Modification response
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         data: Dict[str, Any] = {
             "orderId": order_id,

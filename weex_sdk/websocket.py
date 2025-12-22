@@ -1,15 +1,16 @@
 """WebSocket client for Weex API (sync and async)."""
 
+import asyncio
 import json
-import time
 import threading
-from typing import Optional, Dict, Any, Callable, List
+import time
+from typing import Any, Callable, Dict, Optional
+
 import websocket
 import websockets
-import asyncio
 
 from weex_sdk.auth import RequestHeaders
-from weex_sdk.exceptions import WeexWebSocketError, WeexNetworkError
+from weex_sdk.exceptions import WeexNetworkError, WeexWebSocketError
 from weex_sdk.logger import get_logger
 from weex_sdk.models import WebSocketSubscription
 

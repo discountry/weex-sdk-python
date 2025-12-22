@@ -1,6 +1,6 @@
 """Parameter validation utilities."""
 
-from typing import Optional, List, Any, Union
+from typing import Union
 
 from weex_sdk.exceptions import WeexValidationError
 

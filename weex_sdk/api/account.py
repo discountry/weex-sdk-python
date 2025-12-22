@@ -1,8 +1,9 @@
 """Account API module for Weex SDK."""
 
-from typing import Optional, Dict, Any, List
-from weex_sdk.client import WeexClient, AsyncWeexClient
-from weex_sdk.models import AccountInfo, Collateral, Asset, Position
+from typing import Any, Dict, List, Optional
+
+from weex_sdk.client import AsyncWeexClient, WeexClient
+from weex_sdk.models import Asset, Position
 
 
 class AccountAPI:
@@ -23,7 +24,7 @@ class AccountAPI:
             Account information including account settings and collateral
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         return self.client.get("/capi/v2/account/getAccounts")
 
@@ -37,7 +38,7 @@ class AccountAPI:
             Account information for the specified coin
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         return self.client.get("/capi/v2/account/getAccount", params={"coin": coin})
 
@@ -48,7 +49,7 @@ class AccountAPI:
             List of asset information
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         response = self.client.get("/capi/v2/account/assets")
         if isinstance(response, list):
@@ -78,7 +79,7 @@ class AccountAPI:
             Bill history with items and pagination info
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         data: Dict[str, Any] = {}
         if coin:
@@ -106,7 +107,7 @@ class AccountAPI:
             Account settings including leverage settings
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         params = {}
         if symbol:
@@ -132,7 +133,7 @@ class AccountAPI:
             Response with success status
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         if margin_mode == 3 and not short_leverage:
             short_leverage = long_leverage
@@ -162,7 +163,7 @@ class AccountAPI:
             Response with success status
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         data = {
             "coinId": coin_id,
@@ -186,7 +187,7 @@ class AccountAPI:
             Response with success status
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         data = {
             "positionId": position_id,
@@ -201,7 +202,7 @@ class AccountAPI:
             List of position information
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         response = self.client.get("/capi/v2/account/position/allPosition")
         if isinstance(response, list):
@@ -218,7 +219,7 @@ class AccountAPI:
             Position information
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         return self.client.get(
             "/capi/v2/account/position/singlePosition", params={"symbol": symbol}
@@ -241,7 +242,7 @@ class AccountAPI:
             Response with success status
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         data = {
             "symbol": symbol,

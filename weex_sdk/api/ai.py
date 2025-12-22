@@ -1,7 +1,8 @@
 """AI API module for Weex SDK."""
 
-from typing import Optional, Dict, Any
-from weex_sdk.client import WeexClient, AsyncWeexClient
+from typing import Any, Dict, Optional
+
+from weex_sdk.client import AsyncWeexClient, WeexClient
 
 
 class AIAPI:
@@ -38,7 +39,7 @@ class AIAPI:
             Upload response with success status
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
 
         Example:
             >>> client = WeexClient(api_key, secret_key, passphrase)
@@ -98,7 +99,7 @@ class AsyncAIAPI:
             Upload response with success status
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         data: Dict[str, Any] = {
             "stage": stage,

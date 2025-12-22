@@ -1,8 +1,9 @@
 """Market API module for Weex SDK."""
 
-from typing import Optional, Dict, Any, List
-from weex_sdk.client import WeexClient, AsyncWeexClient
-from weex_sdk.models import Ticker, Contract, Depth, Trade
+from typing import Any, Dict, List, Optional
+
+from weex_sdk.client import AsyncWeexClient, WeexClient
+from weex_sdk.models import Contract, Depth, Ticker, Trade
 
 
 class MarketAPI:
@@ -23,7 +24,7 @@ class MarketAPI:
             Server time information (epoch, iso, timestamp)
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         return self.client.get("/capi/v2/market/time")
 
@@ -37,7 +38,7 @@ class MarketAPI:
             List of contract information
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         params = {}
         if symbol:
@@ -58,7 +59,7 @@ class MarketAPI:
             Market depth data (asks, bids, timestamp)
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         return self.client.get("/capi/v2/market/depth", params={"symbol": symbol, "limit": limit})
 
@@ -69,7 +70,7 @@ class MarketAPI:
             List of ticker information for all trading pairs
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         response = self.client.get("/capi/v2/market/tickers")
         if isinstance(response, list):
@@ -86,7 +87,7 @@ class MarketAPI:
             Ticker information
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         return self.client.get("/capi/v2/market/ticker", params={"symbol": symbol})
 
@@ -101,7 +102,7 @@ class MarketAPI:
             List of recent trades
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         response = self.client.get(
             "/capi/v2/market/trades", params={"symbol": symbol, "limit": limit}
@@ -129,7 +130,7 @@ class MarketAPI:
             List of candlestick data arrays
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         params = {
             "symbol": symbol,
@@ -165,7 +166,7 @@ class MarketAPI:
             List of historical candlestick data arrays
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         params = {
             "symbol": symbol,
@@ -194,7 +195,7 @@ class MarketAPI:
             Index price information
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         return self.client.get(
             "/capi/v2/market/index", params={"symbol": symbol, "priceType": price_type}
@@ -210,7 +211,7 @@ class MarketAPI:
             Open interest information
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         response = self.client.get("/capi/v2/market/open_interest", params={"symbol": symbol})
         if isinstance(response, list):
@@ -227,7 +228,7 @@ class MarketAPI:
             Funding time information
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         return self.client.get("/capi/v2/market/funding_time", params={"symbol": symbol})
 
@@ -242,7 +243,7 @@ class MarketAPI:
             List of historical funding rate information
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         response = self.client.get(
             "/capi/v2/market/getHistoryFundRate",
@@ -262,7 +263,7 @@ class MarketAPI:
             List of current funding rate information
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
         """
         params = {}
         if symbol:

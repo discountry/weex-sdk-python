@@ -1,24 +1,23 @@
 """HTTP client for Weex API (sync and async)."""
 
 import json
-import time
-from typing import Optional, Dict, Any, Union
-import requests
-import aiohttp
+from typing import Any, Dict, Optional
 
+import aiohttp
+import requests
+
+from weex_sdk.api.account import AccountAPI, AsyncAccountAPI
+from weex_sdk.api.ai import AIAPI, AsyncAIAPI
+from weex_sdk.api.market import MarketAPI, AsyncMarketAPI
+from weex_sdk.api.trade import TradeAPI, AsyncTradeAPI
 from weex_sdk.auth import RequestHeaders
 from weex_sdk.exceptions import (
-    WeexAPIException,
     WeexNetworkError,
     WeexRateLimitError,
     raise_exception_from_response,
 )
 from weex_sdk.logger import get_logger
 from weex_sdk.utils.helpers import sanitize_log_data
-from weex_sdk.api.account import AccountAPI, AsyncAccountAPI
-from weex_sdk.api.market import MarketAPI, AsyncMarketAPI
-from weex_sdk.api.trade import TradeAPI, AsyncTradeAPI
-from weex_sdk.api.ai import AIAPI, AsyncAIAPI
 
 logger = get_logger("client")
 
@@ -163,7 +162,7 @@ class WeexClient(BaseClient):
             Parsed JSON response
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
             WeexNetworkError: On network errors
         """
         url = f"{self.base_url}{path}"
@@ -217,7 +216,7 @@ class WeexClient(BaseClient):
             Parsed JSON response
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
             WeexNetworkError: On network errors
         """
         url = f"{self.base_url}{path}"
@@ -323,7 +322,7 @@ class AsyncWeexClient(BaseClient):
             Parsed JSON response
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
             WeexNetworkError: On network errors
         """
         if not self.session:
@@ -394,7 +393,7 @@ class AsyncWeexClient(BaseClient):
             Parsed JSON response
 
         Raises:
-            WeexAPIException: On API errors
+            WeexAPIError: On API errors
             WeexNetworkError: On network errors
         """
         if not self.session:

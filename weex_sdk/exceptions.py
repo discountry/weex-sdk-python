@@ -3,7 +3,7 @@
 from typing import Optional
 
 
-class WeexAPIException(Exception):
+class WeexAPIError(Exception):
     """Base exception for all Weex API errors."""
 
     def __init__(
@@ -31,13 +31,13 @@ class WeexAPIException(Exception):
         return self.message
 
 
-class WeexAuthenticationError(WeexAPIException):
+class WeexAuthenticationError(WeexAPIError):
     """Authentication related errors (40001-40014, 40011-40012)."""
 
     pass
 
 
-class WeexRateLimitError(WeexAPIException):
+class WeexRateLimitError(WeexAPIError):
     """Rate limit error (429)."""
 
     def __init__(
@@ -59,26 +59,26 @@ class WeexRateLimitError(WeexAPIException):
         self.retry_after = retry_after
 
 
-class WeexNetworkError(WeexAPIException):
+class WeexNetworkError(WeexAPIError):
     """Network related errors."""
 
     pass
 
 
-class WeexWebSocketError(WeexAPIException):
+class WeexWebSocketError(WeexAPIError):
     """WebSocket related errors."""
 
     pass
 
 
-class WeexValidationError(WeexAPIException):
+class WeexValidationError(WeexAPIError):
     """Parameter validation errors (40017-40020)."""
 
     pass
 
 
 # Error code mapping based on API documentation
-ERROR_CODE_MAP: dict[str, type[WeexAPIException]] = {
+ERROR_CODE_MAP: dict[str, type[WeexAPIError]] = {
     "40001": WeexAuthenticationError,  # Header "ACCESS_KEY" is required
     "40002": WeexAuthenticationError,  # Header "ACCESS_SIGN" is required
     "40003": WeexAuthenticationError,  # Header "ACCESS_TIMESTAMP" is required
@@ -91,7 +91,7 @@ ERROR_CODE_MAP: dict[str, type[WeexAPIException]] = {
     "40012": WeexAuthenticationError,  # Incorrect API key/Passphrase
     "40013": WeexAuthenticationError,  # Account frozen
     "40014": WeexAuthenticationError,  # Invalid permissions
-    "40015": WeexAPIException,  # System error
+    "40015": WeexAPIError,  # System error
     "40017": WeexValidationError,  # Parameter validation failed
     "40018": WeexAuthenticationError,  # Invalid IP request
     "40019": WeexValidationError,  # Parameter cannot be empty
@@ -99,10 +99,10 @@ ERROR_CODE_MAP: dict[str, type[WeexAPIException]] = {
     "40022": WeexAuthenticationError,  # Insufficient permissions
     "40753": WeexAuthenticationError,  # API permission disabled
     "429": WeexRateLimitError,  # Too many requests
-    "50003": WeexAPIException,  # Not have permission to trade this pair
-    "50004": WeexAPIException,  # Not have permission to access this API
-    "50005": WeexAPIException,  # Order does not exist
-    "50007": WeexAPIException,  # Leverage cannot exceed the limit
+    "50003": WeexAPIError,  # Not have permission to trade this pair
+    "50004": WeexAPIError,  # Not have permission to access this API
+    "50005": WeexAPIError,  # Order does not exist
+    "50007": WeexAPIError,  # Leverage cannot exceed the limit
 }
 
 
@@ -119,7 +119,7 @@ def raise_exception_from_response(
         request_time: Request timestamp
 
     Raises:
-        WeexAPIException: Appropriate exception based on error code
+        WeexAPIError: Appropriate exception based on error code
     """
-    exception_class = ERROR_CODE_MAP.get(code, WeexAPIException)
+    exception_class = ERROR_CODE_MAP.get(code, WeexAPIError)
     raise exception_class(message=message, code=code, request_time=request_time)
