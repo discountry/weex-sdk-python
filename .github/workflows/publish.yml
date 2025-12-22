@@ -57,9 +57,19 @@ jobs:
         run: |
           if [ -z "$TWINE_PASSWORD" ]; then
             echo "⚠️  TESTPYPI_API_TOKEN not configured. Skipping TestPyPI upload."
-            echo "💡 To enable TestPyPI publishing, add TESTPYPI_API_TOKEN to GitHub Secrets."
+            echo "💡 To enable TestPyPI publishing:"
+            echo "   1. Go to https://test.pypi.org/manage/account/token/"
+            echo "   2. Create an API token"
+            echo "   3. Add it as TESTPYPI_API_TOKEN in GitHub Secrets"
             exit 0
           fi
+          
+          # 验证 token 格式（应该以 pypi- 开头）
+          if [[ ! "$TWINE_PASSWORD" =~ ^pypi- ]]; then
+            echo "⚠️  Warning: Token should start with 'pypi-'"
+          fi
+          
+          echo "📤 Uploading to TestPyPI..."
           twine upload --repository testpypi dist/*
       
       - name: Publish to PyPI (on release or manual)
@@ -69,7 +79,24 @@ jobs:
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: twine upload dist/*
+        run: |
+          if [ -z "$TWINE_PASSWORD" ]; then
+            echo "❌ PYPI_API_TOKEN not configured!"
+            echo "💡 To enable PyPI publishing:"
+            echo "   1. Go to https://pypi.org/manage/account/token/"
+            echo "   2. Create an API token (scope: entire account or project)"
+            echo "   3. Add it as PYPI_API_TOKEN in GitHub Secrets"
+            echo "      (Repository Settings → Secrets and variables → Actions)"
+            exit 1
+          fi
+          
+          # 验证 token 格式（应该以 pypi- 开头）
+          if [[ ! "$TWINE_PASSWORD" =~ ^pypi- ]]; then
+            echo "⚠️  Warning: Token should start with 'pypi-'"
+          fi
+          
+          echo "📤 Uploading to PyPI..."
+          twine upload dist/*
       
       - name: Show package info
         if: always()
