@@ -7,6 +7,53 @@ echo "🚀 Weex SDK 发布脚本"
 echo "===================="
 echo ""
 
+# 询问是否更新版本号
+if [ -f "bump_version.py" ]; then
+    echo "📦 版本号管理"
+    echo "   当前版本号可以从以下文件查看:"
+    echo "   - pyproject.toml"
+    echo "   - setup.py"
+    echo "   - weex_sdk/__init__.py"
+    echo ""
+    read -p "是否要更新版本号? (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        echo ""
+        echo "请选择版本更新类型:"
+        echo "  1) patch  - 补丁版本 (1.0.1 -> 1.0.2)"
+        echo "  2) minor   - 次版本 (1.0.1 -> 1.1.0)"
+        echo "  3) major   - 主版本 (1.0.1 -> 2.0.0)"
+        echo "  4) custom  - 自定义版本号"
+        echo ""
+        read -p "请选择 (1-4): " -n 1 -r version_choice
+        echo
+        echo ""
+        
+        case $version_choice in
+            1)
+                python bump_version.py patch
+                ;;
+            2)
+                python bump_version.py minor
+                ;;
+            3)
+                python bump_version.py major
+                ;;
+            4)
+                read -p "请输入新版本号 (格式: x.y.z): " custom_version
+                python bump_version.py "$custom_version"
+                ;;
+            *)
+                echo "⏭️  跳过版本号更新"
+                ;;
+        esac
+        echo ""
+    else
+        echo "⏭️  跳过版本号更新"
+        echo ""
+    fi
+fi
+
 # 检查必要的工具
 if ! command -v python &> /dev/null; then
     echo "❌ 错误: 未找到 python 命令"
