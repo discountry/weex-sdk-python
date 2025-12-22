@@ -1,0 +1,11 @@
+# PyPI 配置文件示例
+# 复制此文件为 ~/.pypirc (Linux/Mac) 或 %USERPROFILE%\.pypirc (Windows)
+# 并填入你的 API token
+
+[pypi]
+username = __token__
+password = pypi-你的正式PyPI-API-token
+
+[testpypi]
+username = __token__
+password = pypi-你的TestPyPI-API-token
