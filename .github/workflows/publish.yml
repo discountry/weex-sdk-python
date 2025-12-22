@@ -50,21 +50,17 @@ jobs:
       - name: Publish to TestPyPI (on manual trigger)
         if: |
           github.event_name == 'workflow_dispatch' &&
-          inputs.publish_to_testpypi == true &&
-          secrets.TESTPYPI_API_TOKEN != ''
+          inputs.publish_to_testpypi == true
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.TESTPYPI_API_TOKEN }}
-        run: twine upload --repository testpypi dist/*
-      
-      - name: Skip TestPyPI (token not configured)
-        if: |
-          github.event_name == 'workflow_dispatch' &&
-          inputs.publish_to_testpypi == true &&
-          secrets.TESTPYPI_API_TOKEN == ''
         run: |
-          echo "⚠️  TESTPYPI_API_TOKEN not configured. Skipping TestPyPI upload."
-          echo "💡 To enable TestPyPI publishing, add TESTPYPI_API_TOKEN to GitHub Secrets."
+          if [ -z "$TWINE_PASSWORD" ]; then
+            echo "⚠️  TESTPYPI_API_TOKEN not configured. Skipping TestPyPI upload."
+            echo "💡 To enable TestPyPI publishing, add TESTPYPI_API_TOKEN to GitHub Secrets."
+            exit 0
+          fi
+          twine upload --repository testpypi dist/*
       
       - name: Publish to PyPI (on release or manual)
         if: |

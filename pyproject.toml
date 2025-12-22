@@ -1,13 +1,15 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=77.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "weex-sdk"
-version = "1.0.7"
+version = "1.0.8"
 description = "A comprehensive Python SDK for Weex exchange API (HTTP + WebSocket)"
 readme = "README.md"
 requires-python = ">=3.8"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 authors = [
     {name = "Weex SDK Contributors"}
 ]
