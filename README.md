@@ -1,5 +1,9 @@
 # Weex SDK for Python
 
+![PyPI - Version](https://img.shields.io/pypi/v/weex-sdk)
+![PyPI - License](https://img.shields.io/pypi/l/weex-sdk)
+![PyPI - Status](https://img.shields.io/pypi/status/weex-sdk)
+
 A comprehensive Python SDK for Weex exchange API, supporting both HTTP REST API and WebSocket connections with automatic reconnection and heartbeat mechanisms.
 
 ## Features
