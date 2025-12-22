@@ -362,6 +362,7 @@ class AsyncWeexClient(BaseClient):
             ) as response:
                 # Read response text
                 text = await response.text()
+
                 # Create a mock response object for _handle_response
                 class MockResponse:
                     def __init__(self, status: int, text: str, headers: Any) -> None:

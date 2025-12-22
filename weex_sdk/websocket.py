@@ -638,7 +638,9 @@ class AsyncWeexWebSocket:
             logger.error(f"Failed to send message: {e}")
             raise WeexWebSocketError(f"Failed to send message: {str(e)}") from e
 
-    async def subscribe_ticker(self, symbol: str, callback: Callable[[Dict[str, Any]], None]) -> None:
+    async def subscribe_ticker(
+        self, symbol: str, callback: Callable[[Dict[str, Any]], None]
+    ) -> None:
         """Subscribe to ticker channel."""
         channel = f"ticker.{symbol}"
         self.subscriptions[channel] = WebSocketSubscription(channel=channel, callback=callback)

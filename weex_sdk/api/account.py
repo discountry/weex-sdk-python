@@ -220,7 +220,9 @@ class AccountAPI:
         Raises:
             WeexAPIException: On API errors
         """
-        return self.client.get("/capi/v2/account/position/singlePosition", params={"symbol": symbol})
+        return self.client.get(
+            "/capi/v2/account/position/singlePosition", params={"symbol": symbol}
+        )
 
     def change_hold_model(
         self,
@@ -361,7 +363,9 @@ class AsyncAccountAPI:
 
     async def get_single_position(self, symbol: str) -> Dict[str, Any]:
         """Get single position for a trading pair (async)."""
-        return await self.client.get("/capi/v2/account/position/singlePosition", params={"symbol": symbol})
+        return await self.client.get(
+            "/capi/v2/account/position/singlePosition", params={"symbol": symbol}
+        )
 
     async def change_hold_model(
         self,

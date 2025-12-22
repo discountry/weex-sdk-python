@@ -22,9 +22,7 @@ def validate_symbol(symbol: str) -> None:
 
     # Basic format check: should start with 'cmt_' and contain base/quote
     if not symbol.startswith("cmt_"):
-        raise WeexValidationError(
-            f"Symbol must start with 'cmt_', got: {symbol}"
-        )
+        raise WeexValidationError(f"Symbol must start with 'cmt_', got: {symbol}")
 
     if len(symbol) < 8:  # Minimum: cmt_XX
         raise WeexValidationError(f"Symbol too short: {symbol}")
@@ -76,9 +74,7 @@ def validate_order_type(order_type: Union[str, int]) -> None:
     valid_types = ["0", "1", "2", "3"]
     order_type_str = str(order_type)
     if order_type_str not in valid_types:
-        raise WeexValidationError(
-            f"Invalid order type: {order_type}. Must be one of {valid_types}"
-        )
+        raise WeexValidationError(f"Invalid order type: {order_type}. Must be one of {valid_types}")
 
 
 def validate_order_direction(direction: Union[str, int]) -> None:
@@ -127,9 +123,7 @@ def validate_client_oid(client_oid: str) -> None:
         raise WeexValidationError("Client order ID cannot be empty")
 
     if not isinstance(client_oid, str):
-        raise WeexValidationError(
-            f"Client order ID must be a string, got {type(client_oid)}"
-        )
+        raise WeexValidationError(f"Client order ID must be a string, got {type(client_oid)}")
 
     if len(client_oid) > 40:
         raise WeexValidationError(
@@ -152,9 +146,7 @@ def validate_limit(limit: int, min_value: int = 1, max_value: int = 100) -> None
         raise WeexValidationError(f"Limit must be an integer, got {type(limit)}")
 
     if limit < min_value or limit > max_value:
-        raise WeexValidationError(
-            f"Limit must be between {min_value} and {max_value}, got {limit}"
-        )
+        raise WeexValidationError(f"Limit must be between {min_value} and {max_value}, got {limit}")
 
 
 def validate_timestamp(timestamp: int) -> None:
@@ -174,6 +166,4 @@ def validate_timestamp(timestamp: int) -> None:
     max_ts = 4102444800000  # 2100-01-01
 
     if timestamp < min_ts or timestamp > max_ts:
-        raise WeexValidationError(
-            f"Timestamp out of valid range: {timestamp}"
-        )
+        raise WeexValidationError(f"Timestamp out of valid range: {timestamp}")

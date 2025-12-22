@@ -103,7 +103,9 @@ class MarketAPI:
         Raises:
             WeexAPIException: On API errors
         """
-        response = self.client.get("/capi/v2/market/trades", params={"symbol": symbol, "limit": limit})
+        response = self.client.get(
+            "/capi/v2/market/trades", params={"symbol": symbol, "limit": limit}
+        )
         if isinstance(response, list):
             return response
         return []
@@ -194,7 +196,9 @@ class MarketAPI:
         Raises:
             WeexAPIException: On API errors
         """
-        return self.client.get("/capi/v2/market/index", params={"symbol": symbol, "priceType": price_type})
+        return self.client.get(
+            "/capi/v2/market/index", params={"symbol": symbol, "priceType": price_type}
+        )
 
     def get_open_interest(self, symbol: str) -> List[Dict[str, Any]]:
         """Get open interest.
@@ -296,7 +300,9 @@ class AsyncMarketAPI:
 
     async def get_depth(self, symbol: str, limit: int = 15) -> Depth:
         """Get market depth (async)."""
-        return await self.client.get("/capi/v2/market/depth", params={"symbol": symbol, "limit": limit})
+        return await self.client.get(
+            "/capi/v2/market/depth", params={"symbol": symbol, "limit": limit}
+        )
 
     async def get_tickers(self) -> List[Ticker]:
         """Get all tickers (async)."""
@@ -311,7 +317,9 @@ class AsyncMarketAPI:
 
     async def get_trades(self, symbol: str, limit: int = 100) -> List[Trade]:
         """Get recent trades (async)."""
-        response = await self.client.get("/capi/v2/market/trades", params={"symbol": symbol, "limit": limit})
+        response = await self.client.get(
+            "/capi/v2/market/trades", params={"symbol": symbol, "limit": limit}
+        )
         if isinstance(response, list):
             return response
         return []
@@ -362,7 +370,9 @@ class AsyncMarketAPI:
 
     async def get_index(self, symbol: str, price_type: str = "INDEX") -> Dict[str, Any]:
         """Get index price (async)."""
-        return await self.client.get("/capi/v2/market/index", params={"symbol": symbol, "priceType": price_type})
+        return await self.client.get(
+            "/capi/v2/market/index", params={"symbol": symbol, "priceType": price_type}
+        )
 
     async def get_open_interest(self, symbol: str) -> List[Dict[str, Any]]:
         """Get open interest (async)."""

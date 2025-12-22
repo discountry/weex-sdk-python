@@ -1,7 +1,7 @@
 """Helper utilities for Weex SDK."""
 
 import time
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Union
 
 
 def get_current_timestamp_ms() -> int:
@@ -44,7 +44,9 @@ def build_query_string(params: Dict[str, Any]) -> str:
     return "&".join(query_parts)
 
 
-def sanitize_log_data(data: Dict[str, Any], sensitive_keys: Optional[List[str]] = None) -> Dict[str, Any]:
+def sanitize_log_data(
+    data: Dict[str, Any], sensitive_keys: Optional[List[str]] = None
+) -> Dict[str, Any]:
     """Sanitize sensitive data for logging.
 
     Args:

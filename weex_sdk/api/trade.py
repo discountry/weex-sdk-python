@@ -35,7 +35,8 @@ class TradeAPI:
             symbol: Trading pair
             client_oid: Custom order ID (no more than 40 characters)
             size: Order quantity (cannot be zero or negative)
-            order_type: Order type (0: Normal, 1: Post-Only, 2: Fill-Or-Kill, 3: Immediate Or Cancel)
+            order_type: Order type (0: Normal, 1: Post-Only, 2: Fill-Or-Kill,
+                3: Immediate Or Cancel)
             match_price: Price type (0: Limit price, 1: Market price)
             price: Order price (required for limit orders)
             type: Order direction (1: Open long, 2: Open short, 3: Close long, 4: Close short)
