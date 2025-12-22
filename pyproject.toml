@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "weex-sdk"
-version = "1.0.2"
+version = "1.0.3"
 description = "A comprehensive Python SDK for Weex exchange API (HTTP + WebSocket)"
 readme = "README.md"
 requires-python = ">=3.8"

@@ -15,7 +15,7 @@ from weex_sdk.exceptions import (
 )
 from weex_sdk.websocket import AsyncWeexWebSocket, WeexWebSocket
 
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 
 __all__ = [
     # Clients

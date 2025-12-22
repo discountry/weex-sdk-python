@@ -26,20 +26,49 @@ jobs:
       - name: Verify version consistency
         run: |
           VERSION="${{ steps.version.outputs.version }}"
-          PYPROJECT_VERSION=$(grep -E '^version = ' pyproject.toml | cut -d'"' -f2)
-          SETUP_VERSION=$(grep -E 'version=' setup.py | cut -d'"' -f2)
-          INIT_VERSION=$(grep -E '__version__ = ' weex_sdk/__init__.py | cut -d"'" -f2)
           
-          echo "Tag version: $VERSION"
-          echo "pyproject.toml version: $PYPROJECT_VERSION"
-          echo "setup.py version: $SETUP_VERSION"
-          echo "__init__.py version: $INIT_VERSION"
+          # 使用 Python 提取版本号，更可靠
+          python3 << 'EOF'
+          import re
+          import sys
           
-          if [ "$VERSION" != "$PYPROJECT_VERSION" ] || [ "$VERSION" != "$SETUP_VERSION" ] || [ "$VERSION" != "$INIT_VERSION" ]; then
-            echo "❌ Version mismatch detected!"
-            exit 1
-          fi
-          echo "✅ All versions match"
+          def extract_version(file_path, pattern):
+              try:
+                  with open(file_path, 'r', encoding='utf-8') as f:
+                      content = f.read()
+                  match = re.search(pattern, content)
+                  if match:
+                      return match.group(1)
+                  return None
+              except Exception as e:
+                  print(f"Error reading {file_path}: {e}", file=sys.stderr)
+                  return None
+          
+          pyproject_version = extract_version('pyproject.toml', r'version\s*=\s*["\']([^"\']+)["\']')
+          setup_version = extract_version('setup.py', r'version\s*=\s*["\']([^"\']+)["\']')
+          init_version = extract_version('weex_sdk/__init__.py', r'__version__\s*=\s*["\']([^"\']+)["\']')
+          
+          version = "${{ steps.version.outputs.version }}"
+          
+          print(f"Tag version: {version}")
+          print(f"pyproject.toml version: {pyproject_version}")
+          print(f"setup.py version: {setup_version}")
+          print(f"__init__.py version: __version__ = \"{init_version}\"")
+          
+          if not pyproject_version or not setup_version or not init_version:
+              print("❌ Failed to extract version numbers from files!", file=sys.stderr)
+              sys.exit(1)
+          
+          if version != pyproject_version or version != setup_version or version != init_version:
+              print("❌ Version mismatch detected!", file=sys.stderr)
+              print(f"   Expected: {version}", file=sys.stderr)
+              print(f"   pyproject.toml: {pyproject_version}", file=sys.stderr)
+              print(f"   setup.py: {setup_version}", file=sys.stderr)
+              print(f"   __init__.py: {init_version}", file=sys.stderr)
+              sys.exit(1)
+          
+          print("✅ All versions match")
+          EOF
       
       - name: Build and check package
         run: |
