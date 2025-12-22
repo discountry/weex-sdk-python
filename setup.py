@@ -17,6 +17,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/weex/weex-sdk-python",
     packages=find_packages(),
+    license="Apache-2.0",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
