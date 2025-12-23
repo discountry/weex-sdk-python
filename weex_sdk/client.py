@@ -1,15 +1,11 @@
 """HTTP client for Weex API (sync and async)."""
 
 import json
-from typing import Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
 import aiohttp
 import requests
 
-from weex_sdk.api.account import AccountAPI, AsyncAccountAPI
-from weex_sdk.api.ai import AIAPI, AsyncAIAPI
-from weex_sdk.api.market import AsyncMarketAPI, MarketAPI
-from weex_sdk.api.trade import AsyncTradeAPI, TradeAPI
 from weex_sdk.auth import RequestHeaders
 from weex_sdk.exceptions import (
     WeexNetworkError,
@@ -18,6 +14,12 @@ from weex_sdk.exceptions import (
 )
 from weex_sdk.logger import get_logger
 from weex_sdk.utils.helpers import sanitize_log_data
+
+if TYPE_CHECKING:
+    from weex_sdk.api.account import AccountAPI, AsyncAccountAPI
+    from weex_sdk.api.ai import AIAPI, AsyncAIAPI
+    from weex_sdk.api.market import AsyncMarketAPI, MarketAPI
+    from weex_sdk.api.trade import AsyncTradeAPI, TradeAPI
 
 logger = get_logger("client")
 
@@ -252,23 +254,27 @@ class WeexClient(BaseClient):
 
     # API modules
     @property
-    def account(self) -> AccountAPI:
+    def account(self) -> "AccountAPI":
         """Get Account API instance."""
+        from weex_sdk.api.account import AccountAPI
         return AccountAPI(self)
 
     @property
-    def market(self) -> MarketAPI:
+    def market(self) -> "MarketAPI":
         """Get Market API instance."""
+        from weex_sdk.api.market import MarketAPI
         return MarketAPI(self)
 
     @property
-    def trade(self) -> TradeAPI:
+    def trade(self) -> "TradeAPI":
         """Get Trade API instance."""
+        from weex_sdk.api.trade import TradeAPI
         return TradeAPI(self)
 
     @property
-    def ai(self) -> AIAPI:
+    def ai(self) -> "AIAPI":
         """Get AI API instance."""
+        from weex_sdk.api.ai import AIAPI
         return AIAPI(self)
 
 
@@ -445,21 +451,25 @@ class AsyncWeexClient(BaseClient):
 
     # API modules
     @property
-    def account(self) -> AsyncAccountAPI:
+    def account(self) -> "AsyncAccountAPI":
         """Get Async Account API instance."""
+        from weex_sdk.api.account import AsyncAccountAPI
         return AsyncAccountAPI(self)
 
     @property
-    def market(self) -> AsyncMarketAPI:
+    def market(self) -> "AsyncMarketAPI":
         """Get Async Market API instance."""
+        from weex_sdk.api.market import AsyncMarketAPI
         return AsyncMarketAPI(self)
 
     @property
-    def trade(self) -> AsyncTradeAPI:
+    def trade(self) -> "AsyncTradeAPI":
         """Get Async Trade API instance."""
+        from weex_sdk.api.trade import AsyncTradeAPI
         return AsyncTradeAPI(self)
 
     @property
-    def ai(self) -> AsyncAIAPI:
+    def ai(self) -> "AsyncAIAPI":
         """Get Async AI API instance."""
+        from weex_sdk.api.ai import AsyncAIAPI
         return AsyncAIAPI(self)
