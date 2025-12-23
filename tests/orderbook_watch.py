@@ -11,11 +11,24 @@ from typing import Dict, Iterable, Optional, Tuple
 from weex_sdk import WeexWebSocket
 
 
-def _format_number(value: Optional[float]) -> str:
+def _format_number(value: Optional[float | str | int]) -> str:
+    """Format a number (which may be string, int, float, or None) to a clean string."""
     if value is None:
         return ""
-    text = f"{value:.8f}".rstrip("0").rstrip(".")
-    return text if text else "0"
+
+    # Convert to float if it's a string
+    if isinstance(value, str):
+        try:
+            value = float(value)
+        except ValueError:
+            return value
+
+    # Format the number
+    try:
+        text = f"{value:.8f}".rstrip("0").rstrip(".")
+        return text if text else "0"
+    except (TypeError, ValueError):
+        return str(value)
 
 
 def _parse_level(entry: object) -> Optional[Tuple[float, float]]:
@@ -61,7 +74,7 @@ class OrderBook:
     def top_bids(self) -> Iterable[Tuple[float, float]]:
         return sorted(self.bids.items(), key=lambda item: item[0], reverse=True)[: self.levels]
 
-    def render(self, symbol: str) -> None:
+    def render(self, symbol: str, trades: Optional[list[dict]] = None) -> None:
         if not self.ready:
             return
         now = time.monotonic()
@@ -90,7 +103,51 @@ class OrderBook:
             bid_size = _format_number(bid[1]) if bid else ""
             lines.append(f"{ask_price:>14} {ask_size:>14} | {bid_price:>14} {bid_size:>14}")
 
-        sys.stdout.write("\033[H\033[J" + "\n".join(lines) + "\n")
+        # Display recent trades on the right
+        if trades:
+            lines[0] += f"{'':20}Recent Trades:"
+            lines[1] += f"{'':23} {'TIME':>8} {'PRICE':>12} {'SIZE':>12} {'SIDE':>6}"
+
+            trade_lines = []
+            for idx, trade in enumerate(trades[:5]):
+                trade_time = trade.get("time", "")
+                if trade_time:
+                    # Format timestamp to HH:MM:SS
+                    try:
+                        ts = int(trade_time) / 1000
+                        trade_time = time.strftime("%H:%M:%S", time.localtime(ts))
+                    except (ValueError, TypeError):
+                        trade_time = str(trade_time)
+
+                price = _format_number(trade.get("price"))
+                size = _format_number(trade.get("size"))
+
+                buyer_maker = trade.get("buyerMaker", False)
+                side_marker = "BUY" if not buyer_maker else "SELL"
+
+                trade_line = f"{' '*23} {trade_time:>8} {price:>12} {size:>12} {side_marker:>6}"
+                trade_lines.append(trade_line)
+
+            # Combine order book and trade lines
+            max_lines = max(len(lines), len(trade_lines) + 2)  # +2 for header
+            output_lines = []
+            for i in range(max_lines):
+                if i < len(lines):
+                    output_line = lines[i]
+                else:
+                    output_line = ""
+
+                if i >= 2 and i - 2 < len(trade_lines):
+                    output_line += trade_lines[i - 2]
+                elif i >= len(lines):
+                    output_line += ""
+
+                output_lines.append(output_line)
+
+            sys.stdout.write("\033[H\033[J" + "\n".join(output_lines) + "\n")
+        else:
+            sys.stdout.write("\033[H\033[J" + "\n".join(lines) + "\n")
+
         sys.stdout.flush()
 
     def _build_side(self, levels: Iterable[object]) -> Dict[float, float]:
@@ -114,6 +171,27 @@ class OrderBook:
                 side.pop(price, None)
             else:
                 side[price] = size
+
+
+class TradeHistory:
+    """Manages recent trade history."""
+
+    def __init__(self, max_trades: int = 10) -> None:
+        self.max_trades = max_trades
+        self.trades: list[dict] = []
+        self.lock = threading.Lock()
+
+    def add_trade(self, trade: dict) -> None:
+        """Add a new trade to the history."""
+        with self.lock:
+            self.trades.insert(0, trade)
+            if len(self.trades) > self.max_trades:
+                self.trades = self.trades[: self.max_trades]
+
+    def get_trades(self) -> list[dict]:
+        """Get current trades."""
+        with self.lock:
+            return list(self.trades)
 
 
 def _run_self_test() -> None:
@@ -154,6 +232,7 @@ def main() -> None:
         return
 
     book = OrderBook(levels=max(1, args.levels))
+    trade_history = TradeHistory(max_trades=5)
     ws = WeexWebSocket(is_private=False)
 
     def on_depth(message: Dict[str, object]) -> None:
@@ -170,7 +249,18 @@ def main() -> None:
                 book.apply_snapshot(asks, bids)
             else:
                 book.apply_changes(asks, bids)
-        book.render(args.symbol)
+        book.render(args.symbol, trade_history.get_trades())
+
+    def on_trade(message: Dict[str, object]) -> None:
+        data_list = message.get("data") if isinstance(message, dict) else None
+        if not data_list:
+            return
+        for trade_data in data_list:
+            if isinstance(trade_data, dict):
+                trade_history.add_trade(trade_data)
+        # Trigger a render update with new trades
+        if book.ready:
+            book.render(args.symbol, trade_history.get_trades())
 
     thread = threading.Thread(target=ws.connect, daemon=True)
     thread.start()
@@ -183,6 +273,7 @@ def main() -> None:
         time.sleep(0.1)
 
     ws.subscribe_depth(args.symbol, limit=15, callback=on_depth)
+    ws.subscribe_trades(args.symbol, callback=on_trade)
 
     try:
         while True:
