@@ -16,6 +16,7 @@ A comprehensive Python SDK for Weex exchange API, supporting both HTTP REST API 
 - **Logging**: Built-in logging with configurable levels
 - **Auto Reconnection**: WebSocket automatic reconnection with exponential backoff
 - **Heartbeat**: Automatic ping/pong handling for WebSocket connections
+- **Grid Trading Strategy**: Dynamic single-direction grid trading strategy with automatic range adjustment
 
 ## Installation
 
@@ -412,6 +413,49 @@ MIT License
 For issues and questions:
 - GitHub Issues: https://github.com/discountry/weex-sdk-python/issues
 - Documentation: https://www.weex.com/api-doc
+
+## Grid Trading Strategy
+
+The SDK includes a comprehensive grid trading strategy implementation with dynamic range adjustment.
+
+### Features
+
+- Dynamic grid range (default ±3%)
+- Single direction (long/short)
+- Automatic order management
+- Stop loss support
+- State persistence
+- WebSocket integration
+
+### Quick Example
+
+```python
+from weex_sdk import WeexClient, WeexWebSocket
+import strategies
+
+# Initialize
+client = WeexClient(api_key="...", secret_key="...", passphrase="...")
+ws = WeexWebSocket(api_key="...", secret_key="...", passphrase="...", is_private=True)
+
+# Create strategy
+strategy = strategies.GridStrategy(
+    client=client,
+    ws=ws,
+    symbol="cmt_btcusdt",
+    direction="long",
+    grid_count=10,
+    size_per_grid=0.01,
+    price_range_percent=0.03,
+    stop_loss_amount=50.0
+)
+
+# Start strategy
+strategy.start()
+```
+
+### Documentation
+
+See [strategies/README.md](strategies/README.md) for detailed documentation and examples.
 
 ## Contributing
 
